@@ -46,3 +46,20 @@
   font-size: 16px;
 }
 
+.toggle-button-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* ปุ่ม Sync แบบมีทั้งไอคอนและข้อความ */
+.sync-button {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ซ่อน background ของปุ่ม icon */
+.sync-button.mat-icon-button {
+  padding: 0 8px;
+}

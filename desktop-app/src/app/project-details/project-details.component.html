@@ -12,9 +12,17 @@
     <span> : {{ folderPath }}</span>
     </div>
 
-    <div>
-        <p><mat-slide-toggle color="primary"><span style="color: white;">Auto Upload</span></mat-slide-toggle></p>
-    </div>
+<div class="toggle-button-row">
+  <mat-slide-toggle color="primary">
+    <span style="color: white;">Auto Upload</span>
+  </mat-slide-toggle>
+
+  <button mat-icon-button aria-label="Sync" class="sync-button" matTooltip="Sync Data" style="color: green;">
+    <mat-icon >sync</mat-icon>
+  </button>
+</div>
+
+
 
 
 
