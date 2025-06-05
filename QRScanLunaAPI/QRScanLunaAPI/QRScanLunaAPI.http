@@ -1,0 +1,6 @@
+@QRScanLunaAPI_HostAddress = http://localhost:5007
+
+GET {{QRScanLunaAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
