@@ -6,6 +6,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build-dev" : "ng build --output-path=dist/luna-dekstop-app --base-href ./",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "electron": "electron main.js"

@@ -13,15 +13,18 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { ProjectDetailsComponent } from './project-details/project-details.component';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
-
-
-
+import {MatInputModule} from '@angular/material/input';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { NewProjectDialogComponent } from './new-project-dialog/new-project-dialog.component';
+import {MatDialogModule} from '@angular/material/dialog';
 @NgModule({
   declarations: [
     AppComponent,
     SidebarComponent,
     MainContentComponent,
-    ProjectDetailsComponent
+    ProjectDetailsComponent,
+    NewProjectDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -32,7 +35,13 @@ import {MatSlideToggleModule} from '@angular/material/slide-toggle';
     MatCardModule,
     MatButtonModule,
     MatToolbarModule,
-    MatSlideToggleModule
+    MatSlideToggleModule,
+    MatInputModule,
+    MatFormFieldModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatDialogModule
+
 
   ],
   providers: [],

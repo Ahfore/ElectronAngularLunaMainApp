@@ -1,0 +1,11 @@
+<h2 mat-dialog-title>New Project</h2>
+<mat-dialog-content class="mat-typography">
+  <mat-form-field class="example-full-width">
+    <mat-label>Project Name</mat-label>
+    <input matInput placeholder="" >
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+  <button mat-raised-button color="primary" cdkFocusInitial (click)="confirm()"> Confirm</button>
+  <button mat-raised-button mat-dialog-close>Cancel</button>
+</mat-dialog-actions>
