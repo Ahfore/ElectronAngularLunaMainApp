@@ -18,9 +18,13 @@
 
 
 
-  <div class="gallery-grid">
-    <mat-card *ngFor="let image of projectImages" class="gallery-item">
-      <img mat-card-image [src]="image" alt="Project Image">
-    </mat-card>
-  </div>
+<div class="gallery-grid">
+  <mat-card *ngFor="let image of projectImages; let i = index" class="gallery-item">
+    <button class="delete-button" (click)="deleteImage(i)">
+      <mat-icon>delete</mat-icon>
+    </button>
+    <img mat-card-image [src]="image" alt="Project Image">
+  </mat-card>
+</div>
+
 </div>

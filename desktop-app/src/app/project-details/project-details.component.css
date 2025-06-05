@@ -12,22 +12,37 @@
 }
 
 .gallery-item {
+  position: relative; /* Important for absolutely-positioned child */
   background: #282828;
   border-radius: 10px;
   overflow: hidden;
   height: 100%;
   width: 100%;
-  display: flex; /* Enables full control of child alignment */
+  display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .gallery-item img {
   width: 100%;
-  /* test */
-  height: 100%; /*test*/
-  object-fit: cover; /* Ensures images fill the entire card without leaving empty spaces */
+  height: 100%;
+  object-fit: cover;
 }
 
+.delete-button {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: transparent;
+  border: none;
+  /* border-radius: 50%; */
+  color: rgb(255, 0, 0);
+  padding: 4px;
+  cursor: pointer;
+  z-index: 2;
+}
 
+.delete-button mat-icon {
+  font-size: 16px;
+}
 

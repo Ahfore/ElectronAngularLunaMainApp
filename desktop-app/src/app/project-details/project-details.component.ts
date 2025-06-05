@@ -63,7 +63,7 @@ selectFolder() {
     window.electronAPI.onNewFileDetected((filePath: string) => {
       const imageSrc = `file://${filePath}`;
       if (this.isImageFile(filePath) && !this.projectImages.includes(imageSrc)) {
-        this.projectImages.push(imageSrc);
+        this.projectImages.unshift(imageSrc);
         this.cdr.detectChanges();
       }
     });
@@ -74,6 +74,10 @@ selectFolder() {
     return /\.(jpe?g|png|gif|bmp|webp)$/i.test(fileName);
   }
 
+
+  deleteImage(index: number): void {
+  this.projectImages.splice(index, 1);
+}
 
 
 
