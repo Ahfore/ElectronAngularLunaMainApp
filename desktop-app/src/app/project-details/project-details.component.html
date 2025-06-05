@@ -1,0 +1,26 @@
+<div class="project-details">
+    <div>
+         <button mat-button [routerLink]="['']" style="color: red;">Back to Project</button>
+    </div>
+  <div>
+     <span>Project Name: {{ projectId }}</span>
+  </div>
+   
+
+    <div >
+    <button mat-button style="color: white;" (click)="selectFolder()">Select Local Folder</button>
+    <span> : {{ folderPath }}</span>
+    </div>
+
+    <div>
+        <p><mat-slide-toggle color="primary"><span style="color: white;">Auto Upload</span></mat-slide-toggle></p>
+    </div>
+
+
+
+  <div class="gallery-grid">
+    <mat-card *ngFor="let image of projectImages" class="gallery-item">
+      <img mat-card-image [src]="image" alt="Project Image">
+    </mat-card>
+  </div>
+</div>

@@ -1,0 +1,33 @@
+.project-details {
+  padding: 20px;
+  background: #1c1c1c;
+  color: white;
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.gallery-item {
+  background: #282828;
+  border-radius: 10px;
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+  display: flex; /* Enables full control of child alignment */
+  align-items: center;
+  justify-content: center;
+}
+
+.gallery-item img {
+  width: 100%;
+  /* test */
+  height: 100%; /*test*/
+  object-fit: cover; /* Ensures images fill the entire card without leaving empty spaces */
+}
+
+
+

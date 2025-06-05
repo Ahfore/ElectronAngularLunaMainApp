@@ -1,0 +1,12 @@
+.sidebar {
+  width: 80px;
+  background: #1c1c1c; /* Dark theme */
+  color: white;
+  padding-top: 10px;
+  text-align: center;
+}
+
+button mat-icon {
+  color: white;
+  margin-bottom: 20px;
+}

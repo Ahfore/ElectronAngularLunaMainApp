@@ -1,0 +1,9 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body {
+  background-color: #1c1c1c; /* Dark background */
+  color: white;
+  margin: 0; /* Remove default spacing */
+  font-family: 'Roboto', sans-serif;
+}

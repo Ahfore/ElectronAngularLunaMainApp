@@ -1,0 +1,17 @@
+<div class="main-container">
+  <mat-toolbar class="header">
+    <span class="title">Luna Foto's Gallery Project</span>
+    <button mat-raised-button color="primary">New Project</button>
+    <button mat-raised-button color="accent">Refresh</button>
+  </mat-toolbar>
+
+  <div class="project-grid">
+    <mat-card *ngFor="let project of projects" class="project-card" [routerLink]="['/project', project.id]">
+      <img mat-card-image [src]="project.image" alt="Project Image">
+      <mat-card-header>
+        <mat-card-title>{{ project.name }}</mat-card-title>
+      </mat-card-header>
+    </mat-card>
+  </div>
+
+</div>
