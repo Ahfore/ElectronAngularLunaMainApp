@@ -28,6 +28,7 @@ export class ProjectDetailsComponent {
   uploadQueue: string[] = [];
   isUploading = false;
   autoUpload = false;
+  uploadCount = 0;
 
 
   constructor(
@@ -166,12 +167,18 @@ getFileNameFromPath(filePath: string): string {
       }
       return throwError(() => err);
     })
-  ).toPromise();
-
+  ).toPromise().then(res => {
+  if (res !== null) {
+    this.uploadCount++;
   const end = performance.now();
   const duration = (end - start) / 1000;
-  console.log(`✅ Uploaded: ${payload.filename} in ${duration.toFixed(2)}s`);
+  // console.log(`✅ Uploaded: ${payload.filename} in ${duration.toFixed(2)}s`);
+  console.log("Uploaded : "+this.uploadCount+"/"+this.projectImages.length +" (Time :"+`${duration.toFixed(2)}s`+")");
   this.uploadDuration = duration;
+  }
+});
+
+
 
 } catch (err) {
   console.error('❌ Upload failed:', err);
@@ -196,6 +203,7 @@ async uploadImageQueued(filePath: string) {
 
     try {
       await this.uploadImage(currentFile);
+      
     } catch (error) {
       console.error('Upload failed:', currentFile, error);
       // ถ้าต้องการ retry หรือ log ซ้ำ สามารถใส่ตรงนี้ได้

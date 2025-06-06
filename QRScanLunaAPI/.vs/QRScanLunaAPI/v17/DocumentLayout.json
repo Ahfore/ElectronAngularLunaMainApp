@@ -3,8 +3,8 @@
   "WorkspaceRootPath": "E:\\lun-foto-gallery-dev-qrcode\\ElectronAngularLunaMainApp\\QRScanLunaAPI\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{1F4AF56E-DB99-45C4-89CB-4B8A9DF26577}|QRScanLunaAPI\\QRScanLunaAPI.csproj|e:\\lun-foto-gallery-dev-qrcode\\electronangularlunamainapp\\qrscanlunaapi\\qrscanlunaapi\\controllers\\autouploadimagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{1F4AF56E-DB99-45C4-89CB-4B8A9DF26577}|QRScanLunaAPI\\QRScanLunaAPI.csproj|solutionrelative:qrscanlunaapi\\controllers\\autouploadimagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{1F4AF56E-DB99-45C4-89CB-4B8A9DF26577}|QRScanLunaAPI\\QRScanLunaAPI.csproj|e:\\lun-foto-gallery-dev-qrcode\\electronangularlunamainapp\\qrscanlunaapi\\qrscanlunaapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{1F4AF56E-DB99-45C4-89CB-4B8A9DF26577}|QRScanLunaAPI\\QRScanLunaAPI.csproj|solutionrelative:qrscanlunaapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{1F4AF56E-DB99-45C4-89CB-4B8A9DF26577}|QRScanLunaAPI\\QRScanLunaAPI.csproj|e:\\lun-foto-gallery-dev-qrcode\\electronangularlunamainapp\\qrscanlunaapi\\qrscanlunaapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -13,6 +13,10 @@
     {
       "AbsoluteMoniker": "D:0:0:{1F4AF56E-DB99-45C4-89CB-4B8A9DF26577}|QRScanLunaAPI\\QRScanLunaAPI.csproj|e:\\lun-foto-gallery-dev-qrcode\\electronangularlunamainapp\\qrscanlunaapi\\qrscanlunaapi\\controllers\\logincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{1F4AF56E-DB99-45C4-89CB-4B8A9DF26577}|QRScanLunaAPI\\QRScanLunaAPI.csproj|solutionrelative:qrscanlunaapi\\controllers\\logincontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{1F4AF56E-DB99-45C4-89CB-4B8A9DF26577}|QRScanLunaAPI\\QRScanLunaAPI.csproj|e:\\lun-foto-gallery-dev-qrcode\\electronangularlunamainapp\\qrscanlunaapi\\qrscanlunaapi\\controllers\\autouploadimagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{1F4AF56E-DB99-45C4-89CB-4B8A9DF26577}|QRScanLunaAPI\\QRScanLunaAPI.csproj|solutionrelative:qrscanlunaapi\\controllers\\autouploadimagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{1F4AF56E-DB99-45C4-89CB-4B8A9DF26577}|QRScanLunaAPI\\QRScanLunaAPI.csproj|e:\\lun-foto-gallery-dev-qrcode\\electronangularlunamainapp\\qrscanlunaapi\\qrscanlunaapi\\singalr\\imagehub.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -25,10 +29,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{1F4AF56E-DB99-45C4-89CB-4B8A9DF26577}|QRScanLunaAPI\\QRScanLunaAPI.csproj|e:\\lun-foto-gallery-dev-qrcode\\electronangularlunamainapp\\qrscanlunaapi\\qrscanlunaapi\\data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{1F4AF56E-DB99-45C4-89CB-4B8A9DF26577}|QRScanLunaAPI\\QRScanLunaAPI.csproj|solutionrelative:qrscanlunaapi\\data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{1F4AF56E-DB99-45C4-89CB-4B8A9DF26577}|QRScanLunaAPI\\QRScanLunaAPI.csproj|e:\\lun-foto-gallery-dev-qrcode\\electronangularlunamainapp\\qrscanlunaapi\\qrscanlunaapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
-      "RelativeMoniker": "D:0:0:{1F4AF56E-DB99-45C4-89CB-4B8A9DF26577}|QRScanLunaAPI\\QRScanLunaAPI.csproj|solutionrelative:qrscanlunaapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
     }
   ],
   "DocumentGroupContainers": [
@@ -38,7 +38,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 5,
+          "SelectedChildIndex": 9,
           "Children": [
             {
               "$type": "Bookmark",
@@ -54,7 +54,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "ImageHub.cs",
               "DocumentMoniker": "E:\\lun-foto-gallery-dev-qrcode\\ElectronAngularLunaMainApp\\QRScanLunaAPI\\QRScanLunaAPI\\SingalR\\ImageHub.cs",
               "RelativeDocumentMoniker": "QRScanLunaAPI\\SingalR\\ImageHub.cs",
@@ -66,7 +66,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 5,
               "Title": "TbImage.cs",
               "DocumentMoniker": "E:\\lun-foto-gallery-dev-qrcode\\ElectronAngularLunaMainApp\\QRScanLunaAPI\\QRScanLunaAPI\\Models\\TbImage.cs",
               "RelativeDocumentMoniker": "QRScanLunaAPI\\Models\\TbImage.cs",
@@ -78,7 +78,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 3,
               "Title": "AutoUploadImageController.cs",
               "DocumentMoniker": "E:\\lun-foto-gallery-dev-qrcode\\ElectronAngularLunaMainApp\\QRScanLunaAPI\\QRScanLunaAPI\\Controllers\\AutoUploadImageController.cs",
               "RelativeDocumentMoniker": "QRScanLunaAPI\\Controllers\\AutoUploadImageController.cs",
@@ -104,7 +104,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "AppDbContext.cs",
               "DocumentMoniker": "E:\\lun-foto-gallery-dev-qrcode\\ElectronAngularLunaMainApp\\QRScanLunaAPI\\QRScanLunaAPI\\Data\\AppDbContext.cs",
               "RelativeDocumentMoniker": "QRScanLunaAPI\\Data\\AppDbContext.cs",
@@ -122,22 +122,23 @@
               "RelativeDocumentMoniker": "QRScanLunaAPI\\Controllers\\LoginController.cs",
               "ToolTip": "E:\\lun-foto-gallery-dev-qrcode\\ElectronAngularLunaMainApp\\QRScanLunaAPI\\QRScanLunaAPI\\Controllers\\LoginController.cs",
               "RelativeToolTip": "QRScanLunaAPI\\Controllers\\LoginController.cs",
-              "ViewState": "AgIAABMAAAAAAAAAAAAgwDsAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAwAAAAAAAAAAAAAADYAAAArAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2025-06-05T21:18:04.958Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 0,
               "Title": "appsettings.json",
               "DocumentMoniker": "E:\\lun-foto-gallery-dev-qrcode\\ElectronAngularLunaMainApp\\QRScanLunaAPI\\QRScanLunaAPI\\appsettings.json",
               "RelativeDocumentMoniker": "QRScanLunaAPI\\appsettings.json",
               "ToolTip": "E:\\lun-foto-gallery-dev-qrcode\\ElectronAngularLunaMainApp\\QRScanLunaAPI\\QRScanLunaAPI\\appsettings.json",
               "RelativeToolTip": "QRScanLunaAPI\\appsettings.json",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABAAAAAsAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABIAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
-              "WhenOpened": "2025-06-05T21:15:16.667Z"
+              "WhenOpened": "2025-06-05T21:15:16.667Z",
+              "EditorCaption": ""
             }
           ]
         }

@@ -52,8 +52,8 @@ namespace QRScanLunaAPI.Controllers
 
 
                 var token = new JwtSecurityToken(
-                        issuer: "localhost:7142",
-                        audience: "localhost:7142",
+                        issuer: "localhost:7214",
+                        audience: "localhost:7214",
                         expires: DateTime.Now.AddMinutes(500),
                         signingCredentials: credentials
                         );
