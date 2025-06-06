@@ -1,12 +1,14 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting.Internal;
 using QRScanLunaAPI.Data;
 using QRScanLunaAPI.Models;
 using SixLabors.ImageSharp;
 using SixLabors.ImageSharp.Formats.Jpeg;
 using SixLabors.ImageSharp.Formats.Png;
 using SixLabors.ImageSharp.Processing;
+using System.IO;
 using System.Security.Cryptography;
 
 namespace QRScanLunaAPI.Controllers
@@ -17,88 +19,86 @@ namespace QRScanLunaAPI.Controllers
     {
 
         private readonly AppDbContext _context;
-        private readonly string _uploadDirectory;
+        private readonly IWebHostEnvironment _hostingEnvironment;
+        private readonly IConfiguration _config;
 
 
-
-        public AutoUploadImageController(AppDbContext context, IConfiguration configuration)
+        public AutoUploadImageController(AppDbContext context, IWebHostEnvironment hostingEnvironment, IConfiguration config)
         {
             _context = context;
-            _uploadDirectory = configuration["UploadSettings:UploadPath"] ?? "uploads";
+            _hostingEnvironment = hostingEnvironment;
+            _config = config;
 
-            if (!Directory.Exists(_uploadDirectory))
-                Directory.CreateDirectory(_uploadDirectory);
         }
-
-
-        
 
 
 
         [HttpPost("upload")]
-        public IActionResult UploadImage(IFormFile file, [FromBody] TbImage ImageModel)
+        public async Task<IActionResult> UploadImage([FromBody] TbImage ImageModel)
         {
-            if (file == null || file.Length == 0)
-                return BadRequest("No file uploaded.");
-
-            // สร้าง Hash จากภาพ
-            string imageHash = ComputeImageHash(file);
-
-            // ตรวจสอบว่าภาพมีอยู่แล้วหรือไม่
-            if (_context.TbImages.Any(img => img.ImageHash == imageHash))
-                return Conflict("Image already exists.");
-
-            // อ่านภาพเข้า MemoryStream
-            using var memoryStream = new MemoryStream();
-            file.CopyTo(memoryStream);
-            memoryStream.Seek(0, SeekOrigin.Begin);
-
-            using var image = Image.Load(memoryStream);
-            image.Mutate(x => x.Resize((int)(image.Width * 0.7), (int)(image.Height * 0.7)));
-
-            // กำหนดชื่อไฟล์และบันทึก
-            string fileExtension = Path.GetExtension(file.FileName).ToLower();
-            string fileName = $"{Guid.NewGuid()}{fileExtension}";
-            string filePath = Path.Combine(_uploadDirectory, fileName);
-
-            using var outputStream = new FileStream(filePath, FileMode.Create);
-
-            // ตรวจสอบประเภทไฟล์เพื่อเลือก Encoder
-            if (fileExtension == ".jpg" || fileExtension == ".jpeg")
-                image.Save(outputStream, new JpegEncoder { Quality = 70 });
-            else
-                image.Save(outputStream, new PngEncoder());
-
-            // บันทึกข้อมูลลงฐานข้อมูล
-            var newImage = new TbImage
+            try
             {
-                ProjectId = ImageModel.ProjectId,
-                ImageName = fileName,
-                ImagePath = filePath,
-                ImageHash = imageHash,
-                UploadDate = DateTime.Now,
-                FileSizeBytes = file.Length,
-                ContentType = file.ContentType
-            };
+                if (string.IsNullOrEmpty(ImageModel.ImageJsonstring))
+                    return BadRequest("Invalid image data");
 
-            _context.TbImages.Add(newImage);
-            _context.SaveChanges();
+                string base64Data = ImageModel.ImageJsonstring.Split(",")[1];
+                byte[] imgByte = Convert.FromBase64String(base64Data);
 
-            return Ok(new { message = "Image uploaded successfully.", fileName });
+                // สร้าง Image Hash
+                string imageHash = ComputeImageHash(imgByte);
+
+                // ตรวจสอบว่ามีภาพนี้อยู่ในฐานข้อมูลหรือไม่
+                bool isDuplicate = await _context.TbImages.AnyAsync(img => img.ImageHash == imageHash);
+                if (isDuplicate)
+                    return Conflict(new { message = "Duplicate image detected" });
+
+                string fileName = Guid.NewGuid().ToString("N").Substring(0, 16) + ".jpg";
+                string path = Path.Combine(_config["UploadPath"], "LUNAQRSCAN", ImageModel.ProjectId.ToString());
+
+                if (!Directory.Exists(path))
+                {
+                    Directory.CreateDirectory(path);
+                }
+
+                string imgPath = Path.Combine(path, fileName);
+                using (var imageFile = new FileStream(imgPath, FileMode.Create))
+                {
+                    imageFile.Write(imgByte, 0, imgByte.Length);
+                    imageFile.Flush();
+                }
+
+                ImageModel.ImageHash = imageHash;
+                ImageModel.ImagePath = path;
+                ImageModel.ImageName = fileName;
+                ImageModel.UploadDate = DateTime.Now;
+
+                await _context.TbImages.AddAsync(ImageModel);
+                await _context.SaveChangesAsync();
+
+                return Ok(new { message = "OK" });
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
-
-
-        private string ComputeImageHash(IFormFile file)
+        // ฟังก์ชันสร้าง SHA-256 Image Hash
+        private string ComputeImageHash(byte[] imageBytes)
         {
-            using var sha256 = SHA256.Create();
-            using var stream = file.OpenReadStream();
-            byte[] hashBytes = sha256.ComputeHash(stream);
-            return BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                byte[] hashBytes = sha256.ComputeHash(imageBytes);
+                return BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
+            }
         }
-
-
-
 
     }
+
+
+
+
+
+
+
 }

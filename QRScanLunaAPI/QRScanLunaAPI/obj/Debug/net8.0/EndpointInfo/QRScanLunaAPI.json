@@ -12,7 +12,17 @@
         ],
         "requestBody": {
           "content": {
-            "multipart/form-data": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TbImage"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TbImage"
+              }
+            },
+            "application/*+json": {
               "schema": {
                 "$ref": "#/components/schemas/TbImage"
               }
@@ -140,6 +150,10 @@
           "projectId": {
             "type": "integer",
             "format": "int32",
+            "nullable": true
+          },
+          "imageJsonstring": {
+            "type": "string",
             "nullable": true
           },
           "imageName": {

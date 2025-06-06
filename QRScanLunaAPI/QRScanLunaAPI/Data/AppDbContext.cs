@@ -61,6 +61,9 @@ public partial class AppDbContext : DbContext
                 .HasMaxLength(100)
                 .IsUnicode(false);
             entity.Property(e => e.ImageHash).IsUnicode(false);
+            entity.Property(e => e.ImageJsonstring)
+                .IsUnicode(false)
+                .HasColumnName("ImageJSONString");
             entity.Property(e => e.ImageName).IsUnicode(false);
             entity.Property(e => e.ImagePath).IsUnicode(false);
             entity.Property(e => e.ProjectId).HasColumnName("ProjectID");

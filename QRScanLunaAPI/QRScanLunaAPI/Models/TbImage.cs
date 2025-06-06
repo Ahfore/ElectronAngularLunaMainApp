@@ -9,6 +9,8 @@ public partial class TbImage
 
     public int? ProjectId { get; set; }
 
+    public string? ImageJsonstring { get; set; }
+
     public string? ImageName { get; set; }
 
     public string? ImagePath { get; set; }

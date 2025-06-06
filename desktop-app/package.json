@@ -9,7 +9,7 @@
     "build-dev" : "ng build --output-path=dist/luna-dekstop-app --base-href ./",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
-    "electron": "electron main.js"
+    "electron": "npm run build-dev && electron main.js"
   },
   "private": true,
   "dependencies": {
