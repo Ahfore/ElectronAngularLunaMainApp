@@ -69,8 +69,10 @@ namespace QRScanLunaAPI.Controllers
 
                 ImageModel.ImageHash = imageHash;
                 ImageModel.ImagePath = path;
+                ImageModel.ContentType = ExtractContentType(ImageModel.ImageJsonstring);
                 ImageModel.ImageName = fileName;
                 ImageModel.UploadDate = DateTime.Now;
+                ImageModel.ImageJsonstring = null;
 
                 await _context.TbImages.AddAsync(ImageModel);
                 await _context.SaveChangesAsync();
@@ -91,6 +93,15 @@ namespace QRScanLunaAPI.Controllers
                 byte[] hashBytes = sha256.ComputeHash(imageBytes);
                 return BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
             }
+        }
+
+        public static string? ExtractContentType(string? base64)
+        {
+            if (string.IsNullOrEmpty(base64))
+                return null;
+
+            var match = System.Text.RegularExpressions.Regex.Match(base64, @"^data:(?<type>.+?);base64,");
+            return match.Success ? match.Groups["type"].Value : null;
         }
 
     }

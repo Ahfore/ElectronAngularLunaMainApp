@@ -73,4 +73,26 @@ ipcMain.handle('read-images-in-folder', async (_, folderPath) => {
   return imageFiles;
 });
 
+ipcMain.handle('read-file-as-base64', async (event, filePath) => {
+  try {
+    const data = fs.readFileSync(filePath);
+    const ext = path.extname(filePath).toLowerCase();
+    const mimeType = getMimeType(ext);
+    return `data:${mimeType};base64,${data.toString('base64')}`;
+  } catch (err) {
+    console.error('[main] Failed to read file as base64:', err);
+    return null;
+  }
+});
 
+function getMimeType(ext) {
+  switch (ext) {
+    case '.jpg':
+    case '.jpeg': return 'image/jpeg';
+    case '.png': return 'image/png';
+    case '.gif': return 'image/gif';
+    case '.bmp': return 'image/bmp';
+    case '.webp': return 'image/webp';
+    default: return 'application/octet-stream';
+  }
+}

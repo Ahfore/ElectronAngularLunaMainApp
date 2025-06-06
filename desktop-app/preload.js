@@ -1,5 +1,6 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
+
 console.log('[preload] loaded ✅');
 
 contextBridge.exposeInMainWorld('electronAPI', {
@@ -10,5 +11,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
       callback(filePath);
     });
   },
-  readImagesInFolder: (folderPath) => ipcRenderer.invoke('read-images-in-folder', folderPath)
+  readImagesInFolder: (folderPath) => ipcRenderer.invoke('read-images-in-folder', folderPath),
+ readFileAsBase64: (filePath) => ipcRenderer.invoke('read-file-as-base64', filePath)
 });
+
+
