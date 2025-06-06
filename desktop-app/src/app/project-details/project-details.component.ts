@@ -22,7 +22,7 @@ export class ProjectDetailsComponent {
   projectId: number = 0;
   projectImages: string[] = [];
   folderPath:any;
-
+   uploadDuration = 0;
 
   constructor(
     private route: ActivatedRoute,
@@ -115,8 +115,10 @@ uploadImage(filePath: string): void {
 
     console.log('[angular] Upload payload:', payload);
 
+        const start = performance.now();
     this.apiService.uploadBase64ImageToServer(payload.base64,payload.filename,1).subscribe(response=>{
-      console.log(response)
+       const end = performance.now();
+      this.uploadDuration = (end - start) / 1000;
     })
 
     

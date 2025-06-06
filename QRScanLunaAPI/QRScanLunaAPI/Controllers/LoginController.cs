@@ -59,7 +59,7 @@ namespace QRScanLunaAPI.Controllers
                         );
 
                 var tokenString = new JwtSecurityTokenHandler().WriteToken(token);
-                return Ok(new { Token = tokenString, LoginID = user.Id, TokenExpireDate = DateTime.Now.AddMinutes(500) });
+                return Ok(new { Token = tokenString, LoginID = user.Id, TokenExpireDate = DateTime.Now.AddDays(30) });
 
 
 
