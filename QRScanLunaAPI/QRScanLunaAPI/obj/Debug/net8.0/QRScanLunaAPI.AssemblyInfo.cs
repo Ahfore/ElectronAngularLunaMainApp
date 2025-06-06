@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("QRScanLunaAPI")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+4f840a3e3ec4dddf99429b2c0e2967da54329cb9")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+70d0b97f32fede411d380035928ede3a681f5684")]
 [assembly: System.Reflection.AssemblyProductAttribute("QRScanLunaAPI")]
 [assembly: System.Reflection.AssemblyTitleAttribute("QRScanLunaAPI")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

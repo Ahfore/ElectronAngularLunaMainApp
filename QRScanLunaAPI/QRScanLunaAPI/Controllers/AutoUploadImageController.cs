@@ -23,6 +23,7 @@ namespace QRScanLunaAPI.Controllers
         private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly IConfiguration _config;
         private readonly IHubContext<ImageHub> _hubContext;
+        private static readonly SemaphoreSlim _semaphore = new SemaphoreSlim(Environment.ProcessorCount * 2);
 
         public AutoUploadImageController(AppDbContext context, IWebHostEnvironment hostingEnvironment, IConfiguration config, IHubContext<ImageHub> hubContext)
         {
@@ -38,6 +39,7 @@ namespace QRScanLunaAPI.Controllers
         [HttpPost("upload")]
         public async Task<IActionResult> UploadImage([FromBody] TbImage ImageModel)
         {
+            await _semaphore.WaitAsync();
             try
             {
                 if (string.IsNullOrEmpty(ImageModel.ImageJsonstring))
@@ -45,6 +47,8 @@ namespace QRScanLunaAPI.Controllers
 
                 string base64Data = ImageModel.ImageJsonstring.Split(",")[1];
                 byte[] imgByte = Convert.FromBase64String(base64Data);
+
+                imgByte = ResizeImage(imgByte, 2); // 2 คือ 2 ล้าน pixel
 
                 // สร้าง Image Hash
                 string imageHash = ComputeImageHash(imgByte);
@@ -85,6 +89,40 @@ namespace QRScanLunaAPI.Controllers
             catch (Exception ex)
             {
                 return BadRequest(ex.Message);
+            }
+            finally
+            {
+                _semaphore.Release();
+            }
+        }
+
+        private byte[] ResizeImage(byte[] imageData, int targetMegapixels = 2)
+        {
+            using (var ms = new MemoryStream(imageData))
+            {
+                using (var image = Image.Load(ms))
+                {
+                    // คำนวณขนาดใหม่โดยรักษาอัตราส่วนให้ได้ ~2 ล้านพิกเซล
+                    double currentPixels = image.Width * image.Height;
+                    double scaleFactor = Math.Sqrt((targetMegapixels * 1000000) / currentPixels);
+
+                    // ถ้าภาพต้นฉบับเล็กกว่าก็ไม่ต้องขยายขนาด
+                    if (scaleFactor >= 1.0)
+                        return imageData;
+
+                    var newWidth = (int)(image.Width * scaleFactor);
+                    var newHeight = (int)(image.Height * scaleFactor);
+
+                    // Resize รูปภาพ
+                    image.Mutate(x => x.Resize(newWidth, newHeight));
+
+                    // บันทึกลง MemoryStream และคืนค่าเป็น byte array
+                    using (var outputMs = new MemoryStream())
+                    {
+                        image.Save(outputMs, new JpegEncoder { Quality = 80 });
+                        return outputMs.ToArray();
+                    }
+                }
             }
         }
 
