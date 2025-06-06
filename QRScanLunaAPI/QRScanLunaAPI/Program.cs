@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using QRScanLunaAPI.Data;
-using QRScanLunaAPI.SingalR;
+
 using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);

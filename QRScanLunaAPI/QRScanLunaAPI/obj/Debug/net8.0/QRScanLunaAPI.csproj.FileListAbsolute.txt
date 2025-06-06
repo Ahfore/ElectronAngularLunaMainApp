@@ -339,3 +339,7 @@ E:\lun-foto-gallery-dev-qrcode\ElectronAngularLunaMainApp\QRScanLunaAPI\QRScanLu
 E:\lun-foto-gallery-dev-qrcode\ElectronAngularLunaMainApp\QRScanLunaAPI\QRScanLunaAPI\obj\Debug\net8.0\ref\QRScanLunaAPI.dll
 E:\lun-foto-gallery-dev-qrcode\ElectronAngularLunaMainApp\QRScanLunaAPI\QRScanLunaAPI\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 E:\lun-foto-gallery-dev-qrcode\ElectronAngularLunaMainApp\QRScanLunaAPI\QRScanLunaAPI\bin\Debug\net8.0\SixLabors.ImageSharp.dll
+E:\lun-foto-gallery-dev-qrcode\ElectronAngularLunaMainApp\QRScanLunaAPI\QRScanLunaAPI\bin\Debug\net8.0\Microsoft.Extensions.Diagnostics.Abstractions.dll
+E:\lun-foto-gallery-dev-qrcode\ElectronAngularLunaMainApp\QRScanLunaAPI\QRScanLunaAPI\bin\Debug\net8.0\Microsoft.Extensions.Hosting.Abstractions.dll
+E:\lun-foto-gallery-dev-qrcode\ElectronAngularLunaMainApp\QRScanLunaAPI\QRScanLunaAPI\bin\Debug\net8.0\Microsoft.Extensions.ObjectPool.dll
+E:\lun-foto-gallery-dev-qrcode\ElectronAngularLunaMainApp\QRScanLunaAPI\QRScanLunaAPI\bin\Debug\net8.0\System.Net.WebSockets.WebSocketProtocol.dll

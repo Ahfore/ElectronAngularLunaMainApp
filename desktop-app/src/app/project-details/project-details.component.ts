@@ -1,6 +1,7 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ApiService } from '../api.service';
+import { concatMap, from, retry, tap } from 'rxjs';
 
 declare global {
   interface Window {
@@ -22,7 +23,10 @@ export class ProjectDetailsComponent {
   projectId: number = 0;
   projectImages: string[] = [];
   folderPath:any;
-   uploadDuration = 0;
+  uploadDuration = 0;
+  uploadQueue: string[] = [];
+  isUploading = false;
+
 
   constructor(
     private route: ActivatedRoute,
@@ -38,17 +42,8 @@ export class ProjectDetailsComponent {
     this.projectImages = [];
   }
 
-selectFolder() {
-  if (!window.electronAPI) {
-    console.error();
-    return;
-  }
-
-  window.electronAPI.openFolderDialog().then((folderPath: string | null) => {
-    if (!folderPath) return;
-    this.folderPath = folderPath;
-
-    window.electronAPI.readImagesInFolder(folderPath).then((files: string[]) => {
+  SyncData(){
+        window.electronAPI.readImagesInFolder(this.folderPath).then((files: string[]) => {
       const imageFiles = files.filter(filePath => this.isImageFile(filePath));
 
       // อัปโหลดภาพที่ยังไม่ถูกอัปโหลดผ่าน ImageService
@@ -57,24 +52,46 @@ selectFolder() {
       this.projectImages = imageFiles.map(filePath => `file://${filePath}`);
       this.cdr.detectChanges();
     });
+  }
 
-    // ตรวจจับการเปลี่ยนแปลงในโฟลเดอร์
-    window.electronAPI.watchFolder(folderPath);
+async selectFolder() {
+  if (!window.electronAPI) {
+    console.error('electronAPI not available');
+    return;
+  }
 
-    window.electronAPI.onNewFileDetected((filePath: string) => {
-      if (this.isImageFile(filePath)) {
-        const imageSrc = `file://${filePath}`;
-        if (!this.projectImages.includes(imageSrc)) {
-          this.projectImages.unshift(imageSrc);
-          this.cdr.detectChanges();
-        }
+  const folderPath = await window.electronAPI.openFolderDialog();
+  if (!folderPath) return;
 
-        // อัปโหลดทันทีผ่าน ImageService
-        this.uploadImage(filePath);
+  this.folderPath = folderPath;
+
+  const files: string[] = await window.electronAPI.readImagesInFolder(folderPath);
+  const imageFiles = files.filter(filePath => this.isImageFile(filePath));
+
+  imageFiles.forEach(filePath => {
+    this.uploadImageQueued(filePath);
+  });
+
+  this.projectImages = imageFiles.map(filePath => `file://${filePath}`);
+  this.cdr.detectChanges();
+
+  // เริ่ม watch โฟลเดอร์
+  window.electronAPI.watchFolder(folderPath);
+
+  // เมื่อพบไฟล์ใหม่
+  window.electronAPI.onNewFileDetected((filePath: string) => {
+    if (this.isImageFile(filePath)) {
+      const imageSrc = `file://${filePath}`;
+      if (!this.projectImages.includes(imageSrc)) {
+        this.projectImages.unshift(imageSrc);
+        this.cdr.detectChanges();
       }
-    });
+
+      this.uploadImageQueued(filePath); // อัปโหลดแบบคิว
+    }
   });
 }
+
 
   isImageFile(fileName: string): boolean {
     return /\.(jpe?g|png|gif|bmp|webp)$/i.test(fileName);
@@ -94,36 +111,67 @@ getFileNameFromPath(filePath: string): string {
 //     .catch(error => console.error("Upload failed", error));
 // }
 
-uploadImage(filePath: string): void {
+ async uploadImage(filePath: string): Promise<void> {
   if (!window.electronAPI) {
     console.error('[angular] electronAPI is undefined');
     return;
   }
 
-  window.electronAPI.readFileAsBase64(filePath).then((base64Data: string | null) => {
+  try {
+    const base64Data = await window.electronAPI.readFileAsBase64(filePath);
     if (!base64Data) {
       console.error('[angular] Failed to read base64 from:', filePath);
       return;
     }
 
     const fileName = this.getFileNameFromPath(filePath);
-
     const payload = {
       filename: fileName,
       base64: base64Data
     };
 
-    console.log('[angular] Upload payload:', payload);
+    const start = performance.now();
 
-        const start = performance.now();
-    this.apiService.uploadBase64ImageToServer(payload.base64,payload.filename,1).subscribe(response=>{
-       const end = performance.now();
-      this.uploadDuration = (end - start) / 1000;
-    })
+    // Wrap Observable เป็น Promise และทำ retry 3 ครั้ง
+    await this.apiService.uploadBase64ImageToServer(payload.base64, payload.filename, 1).pipe(
+      retry(10)
+    ).toPromise();
 
-    
+    const end = performance.now();
+    const duration = (end - start) / 1000;
+    console.log(`✅ Uploaded: ${payload.filename} in ${duration.toFixed(2)}s`);
+    this.uploadDuration = duration;
 
-  });
+  } catch (err) {
+    console.error('❌ Upload failed:', err);
+  }
+}
+
+
+async uploadImageQueued(filePath: string) {
+  // ป้องกันการอัปโหลดไฟล์ซ้ำ
+  if (this.uploadQueue.includes(filePath)) return;
+
+  this.uploadQueue.push(filePath);
+
+  // ถ้ามีการอัปโหลดอยู่แล้ว ไม่ต้องเริ่มรอบใหม่
+  if (this.isUploading) return;
+
+  this.isUploading = true;
+
+  while (this.uploadQueue.length > 0) {
+    const currentFile = this.uploadQueue.shift();
+    if (!currentFile) continue;
+
+    try {
+      await this.uploadImage(currentFile);
+    } catch (error) {
+      console.error('Upload failed:', currentFile, error);
+      // ถ้าต้องการ retry หรือ log ซ้ำ สามารถใส่ตรงนี้ได้
+    }
+  }
+
+  this.isUploading = false;
 }
 
 

@@ -17,7 +17,7 @@
     <span style="color: white;">Auto Upload</span>
   </mat-slide-toggle>
 
-  <button mat-icon-button aria-label="Sync" class="sync-button" matTooltip="Sync Data" style="color: green;">
+  <button mat-icon-button aria-label="Sync" class="sync-button" matTooltip="Sync Data" style="color: green;" (click)="SyncData()" [disabled]="!folderPath">
     <mat-icon >sync</mat-icon>
   </button>
 </div>
