@@ -63,3 +63,7 @@
 .sync-button.mat-icon-button {
   padding: 0 8px;
 }
+
+.not-uploaded {
+  opacity: 0.5;
+}

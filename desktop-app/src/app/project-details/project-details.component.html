@@ -27,12 +27,18 @@
 
 
 <div class="gallery-grid">
-  <mat-card *ngFor="let image of projectImages; let i = index" class="gallery-item">
+  <mat-card
+    *ngFor="let image of projectImages; let i = index"
+    class="gallery-item"
+    [ngClass]="{'not-uploaded': !uploadedFiles.has(image.replace('file://', ''))}">
+    
     <button class="delete-button" (click)="deleteImage(i)">
       <mat-icon>delete</mat-icon>
     </button>
+    
     <img mat-card-image [src]="image" alt="Project Image">
   </mat-card>
 </div>
+
 
 </div>

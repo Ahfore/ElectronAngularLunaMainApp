@@ -29,7 +29,7 @@ export class ProjectDetailsComponent {
   isUploading = false;
   autoUpload = false;
   uploadCount = 0;
-
+  uploadedFiles: Set<string> = new Set<string>();
 
   constructor(
     private route: ActivatedRoute,
@@ -170,6 +170,7 @@ getFileNameFromPath(filePath: string): string {
   ).toPromise().then(res => {
   if (res !== null) {
     this.uploadCount++;
+  this.uploadedFiles.add(filePath);
   const end = performance.now();
   const duration = (end - start) / 1000;
   // console.log(`✅ Uploaded: ${payload.filename} in ${duration.toFixed(2)}s`);
