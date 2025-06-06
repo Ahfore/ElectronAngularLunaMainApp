@@ -85,6 +85,15 @@ ipcMain.handle('read-file-as-base64', async (event, filePath) => {
   }
 });
 
+ipcMain.handle('delete-file', async (event, filePath) => {
+  try {
+    await fs.promises.unlink(filePath);
+    return { success: true };
+  } catch (error) {
+    return { success: false, error: error.message };
+  }
+});
+
 function getMimeType(ext) {
   switch (ext) {
     case '.jpg':

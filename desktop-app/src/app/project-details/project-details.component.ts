@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { ApiService } from '../api.service';
 import { catchError, concatMap, delay, from, mergeMap, of, retry, retryWhen, tap, throwError } from 'rxjs';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { MessageService } from '../services/message.service';
 
 declare global {
   interface Window {
@@ -12,6 +13,7 @@ declare global {
       onNewFileDetected: (callback: (filePath: string) => void) => void;
       readImagesInFolder: (folderPath: string) => Promise<string[]>;
       readFileAsBase64: (filePath: string) => Promise<string | null>;
+      deleteFile: (filePath: string) => Promise<{ success: boolean; error?: string }>;
     };
   }
 }
@@ -35,6 +37,7 @@ export class ProjectDetailsComponent {
     private route: ActivatedRoute,
     private cdr: ChangeDetectorRef,
     private apiService : ApiService,
+    private messageService : MessageService,
 
   ) {}
 
@@ -109,10 +112,38 @@ async selectFolder() {
     return /\.(jpe?g|png|gif|bmp|webp)$/i.test(fileName);
   }
 
+async deleteImage(index: number): Promise<void> {
+  try {
+    const confirmResult = await this.messageService.showConfirm(
+      'ยืนยันการลบภาพ',
+      'ภาพที่คุณลบจะหายไปอย่างถาวร ไม่สามารถกู้คืนได้',
+      'warning',
+      'ตกลง',
+      'ยกเลิก'
+    );
 
-  deleteImage(index: number): void {
-  this.projectImages.splice(index, 1);
+    if (!confirmResult) return;
+
+    if (!window.electronAPI?.deleteFile) {
+      throw new Error('Electron API is not available');
+    }
+
+    const imagePath = this.projectImages[index].replace('file://', '');
+    const deleteResult = await window.electronAPI.deleteFile(imagePath);
+
+    if (deleteResult.success) {
+      this.projectImages.splice(index, 1);
+      this.uploadedFiles.delete(imagePath);
+    } else {
+      throw new Error(deleteResult.error || 'Failed to delete file');
+    }
+  } catch (error) {
+    console.error('Delete error:', error);
+    // แสดงข้อความผิดพลาดให้ผู้ใช้
+    await this.messageService.showAlert('เกิดข้อผิดพลาด', 'ลบภาพไม่สำเร็จ', 'error');
+  }
 }
+
 
 getFileNameFromPath(filePath: string): string {
   return filePath.split(/[\\/]/).pop() || '';

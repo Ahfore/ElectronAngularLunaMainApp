@@ -12,7 +12,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
     });
   },
   readImagesInFolder: (folderPath) => ipcRenderer.invoke('read-images-in-folder', folderPath),
- readFileAsBase64: (filePath) => ipcRenderer.invoke('read-file-as-base64', filePath)
+ readFileAsBase64: (filePath) => ipcRenderer.invoke('read-file-as-base64', filePath),
+ deleteFile: (filePath) => ipcRenderer.invoke('delete-file', filePath)
 });
 
 

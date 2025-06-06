@@ -1,12 +1,12 @@
 {
   "name": "luna-desktop-app",
   "version": "0.0.0",
-    "main": "main.js",
+  "main": "main.js",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "build-dev" : "ng build --output-path=dist/luna-dekstop-app --base-href ./",
+    "build-dev": "ng build --output-path=dist/luna-dekstop-app --base-href ./",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "electron": "npm run build-dev && electron main.js"
@@ -24,6 +24,7 @@
     "@angular/platform-browser-dynamic": "^16.0.0",
     "@angular/router": "^16.0.0",
     "rxjs": "~7.8.0",
+    "sweetalert2": "^11.22.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.13.0"
   },
