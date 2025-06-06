@@ -50,7 +50,7 @@ namespace QRScanLunaAPI.Controllers
                 string imageHash = ComputeImageHash(imgByte);
 
                 // ตรวจสอบว่ามีภาพนี้อยู่ในฐานข้อมูลหรือไม่
-                bool isDuplicate = await _context.TbImages.AnyAsync(img => img.ImageHash == imageHash);
+                bool isDuplicate = await _context.TbImages.AnyAsync(img => img.ImageHash == imageHash && img.ProjectId == ImageModel.ProjectId);
                 if (isDuplicate)
                     return Conflict(new { message = "Duplicate image detected" });
 

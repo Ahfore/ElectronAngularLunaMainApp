@@ -1,7 +1,8 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ApiService } from '../api.service';
-import { concatMap, from, retry, tap } from 'rxjs';
+import { catchError, concatMap, delay, from, mergeMap, of, retry, retryWhen, tap, throwError } from 'rxjs';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 
 declare global {
   interface Window {
@@ -26,6 +27,7 @@ export class ProjectDetailsComponent {
   uploadDuration = 0;
   uploadQueue: string[] = [];
   isUploading = false;
+  autoUpload = false;
 
 
   constructor(
@@ -40,6 +42,12 @@ export class ProjectDetailsComponent {
 
     // Example images (replace with dynamic data)
     this.projectImages = [];
+  }
+
+  ngOnChanges(changes: any): void {
+    //Called before any other lifecycle hook. Use it to inject dependencies, but avoid any serious work here.
+    //Add '${implements OnChanges}' to the class.
+    
   }
 
   async SyncData(){
@@ -65,8 +73,13 @@ async selectFolder() {
   const imageFiles = files.filter(filePath => this.isImageFile(filePath));
 
   imageFiles.forEach(filePath => {
+    if(this.autoUpload){
     this.uploadImageQueued(filePath);
+
+    }
   });
+  
+
 
   this.projectImages = imageFiles.map(filePath => `file://${filePath}`);
   this.cdr.detectChanges();
@@ -82,8 +95,10 @@ async selectFolder() {
         this.projectImages.unshift(imageSrc);
         this.cdr.detectChanges();
       }
-
+      if(this.autoUpload){
       this.uploadImageQueued(filePath); // อัปโหลดแบบคิว
+      }
+      
     }
   });
 }
@@ -129,18 +144,38 @@ getFileNameFromPath(filePath: string): string {
     const start = performance.now();
 
     // Wrap Observable เป็น Promise และทำ retry 3 ครั้ง
-    await this.apiService.uploadBase64ImageToServer(payload.base64, payload.filename, 1).pipe(
-      retry(10)
-    ).toPromise();
+ await this.apiService.uploadBase64ImageToServer(payload.base64, payload.filename, this.projectId).pipe(
+    retryWhen(errors => errors.pipe(
+      mergeMap((err, retryCount) => {
+        if (err.status === 409) {
+          // หยุด retry ถ้าเจอ error 409
+          console.warn(`⚠️ ข้ามการอัพโหลด ${payload.filename} มีข้อมูลในระบบแล้ว`);
+          return throwError(() => err); // ส่ง error ไป catch ด้านล่าง
+        }
+        if (retryCount >= 9) {
+          return throwError(() => err); // ครบ 10 ครั้งแล้ว
+        }
+        console.warn(`🔁 Retry ${retryCount + 1} for ${payload.filename}...`);
+        return of(err).pipe(delay(1000)); // หน่วงก่อน retry
+      })
+    )),
+    catchError(err => {
+      if (err.status === 409) {
+        // Handle 409 ต่างหาก (เช่น return เงียบ ๆ)
+        return of(null);
+      }
+      return throwError(() => err);
+    })
+  ).toPromise();
 
-    const end = performance.now();
-    const duration = (end - start) / 1000;
-    console.log(`✅ Uploaded: ${payload.filename} in ${duration.toFixed(2)}s`);
-    this.uploadDuration = duration;
+  const end = performance.now();
+  const duration = (end - start) / 1000;
+  console.log(`✅ Uploaded: ${payload.filename} in ${duration.toFixed(2)}s`);
+  this.uploadDuration = duration;
 
-  } catch (err) {
-    console.error('❌ Upload failed:', err);
-  }
+} catch (err) {
+  console.error('❌ Upload failed:', err);
+}
 }
 
 
@@ -169,6 +204,21 @@ async uploadImageQueued(filePath: string) {
 
   this.isUploading = false;
 }
+
+AutoUploadChange(event: MatSlideToggleChange){
+  this.autoUpload = event.checked
+    if (this.autoUpload && this.folderPath) {
+    // อัปโหลดภาพทั้งหมดที่ยังไม่ถูกอัปโหลด
+    debugger;
+    console.log(this.autoUpload);
+    this.projectImages.forEach(imageSrc => {
+      const filePath = imageSrc.replace('file://', '');
+      this.uploadImageQueued(filePath);
+    });
+  }
+}
+
+
 
 
 
