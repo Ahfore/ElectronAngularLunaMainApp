@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Hosting.Internal;
 using QRScanLunaAPI.Data;
@@ -21,13 +22,14 @@ namespace QRScanLunaAPI.Controllers
         private readonly AppDbContext _context;
         private readonly IWebHostEnvironment _hostingEnvironment;
         private readonly IConfiguration _config;
+        private readonly IHubContext<ImageHub> _hubContext;
 
-
-        public AutoUploadImageController(AppDbContext context, IWebHostEnvironment hostingEnvironment, IConfiguration config)
+        public AutoUploadImageController(AppDbContext context, IWebHostEnvironment hostingEnvironment, IConfiguration config, IHubContext<ImageHub> hubContext)
         {
             _context = context;
             _hostingEnvironment = hostingEnvironment;
             _config = config;
+            _hubContext = hubContext;
 
         }
 
@@ -76,8 +78,9 @@ namespace QRScanLunaAPI.Controllers
 
                 await _context.TbImages.AddAsync(ImageModel);
                 await _context.SaveChangesAsync();
-
+                await _hubContext.Clients.All.SendAsync("ImageAdded", ImageModel);
                 return Ok(new { message = "OK" });
+
             }
             catch (Exception ex)
             {
