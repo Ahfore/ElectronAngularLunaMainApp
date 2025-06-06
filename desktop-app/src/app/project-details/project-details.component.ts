@@ -42,16 +42,12 @@ export class ProjectDetailsComponent {
     this.projectImages = [];
   }
 
-  SyncData(){
-        window.electronAPI.readImagesInFolder(this.folderPath).then((files: string[]) => {
-      const imageFiles = files.filter(filePath => this.isImageFile(filePath));
-
-      // อัปโหลดภาพที่ยังไม่ถูกอัปโหลดผ่าน ImageService
-      imageFiles.forEach(filePath => this.uploadImage(filePath));
-
-      this.projectImages = imageFiles.map(filePath => `file://${filePath}`);
-      this.cdr.detectChanges();
-    });
+  async SyncData(){
+  const files: string[] = await window.electronAPI.readImagesInFolder(this.folderPath);
+  const imageFiles = files.filter(filePath => this.isImageFile(filePath));
+    imageFiles.forEach(filePath => {
+    this.uploadImageQueued(filePath);
+  });
   }
 
 async selectFolder() {
